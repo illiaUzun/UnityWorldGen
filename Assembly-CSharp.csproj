@@ -65,7 +65,9 @@
     <Compile Include="Assets\Scripts\MapGEN.cs" />
     <Compile Include="Assets\Scripts\MeshGEN.cs" />
     <Compile Include="Assets\Scripts\PerlinNoise.cs" />
+    <Compile Include="Assets\Scripts\Sampling.cs" />
     <Compile Include="Assets\Scripts\TextureGEN.cs" />
+    <Compile Include="Assets\Scripts\TilesGEN.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Documents/Unity_Projects/Map_Gen/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
