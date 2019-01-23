@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class MapGEN : MonoBehaviour {
 
-    public enum DrawMode { NoiseMap, ColourMap, Mesh, TileMap};
+    public enum DrawMode { NoiseMap, IslandFalloffMap, ColourMap, Mesh, TileMap};
     public DrawMode drawmode;
 
-    const int chunkSize = 100;
+    const int chunkSize = 241;
     [Range(0,6)]
     public int levelOfDetail;
     public float noiseScale;
@@ -17,8 +17,12 @@ public class MapGEN : MonoBehaviour {
     public float persistance;
     public float lacunarity;
 
-    public int seed;
+    public static int seed;
+    public float objectsSpawnRate;
     public Vector2 offset;
+
+    public bool island;
+    float[,] islandFalloffMap;
 
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
@@ -27,9 +31,13 @@ public class MapGEN : MonoBehaviour {
 
     public TerrainType[] regions;
 
+    public float objectSpawnRate;
 
     public Transform tilePrefab;
 
+    private void Awake() {
+        islandFalloffMap = IslandGEN.GetIslandMap(chunkSize);
+    }
 
     public void Generate() {
         float[,] noiseMap = PerlinNoise.GenerateNoiseMap(seed, chunkSize, chunkSize, noiseScale, octaves, persistance, lacunarity, offset);
@@ -37,6 +45,9 @@ public class MapGEN : MonoBehaviour {
         Color[] colourMap = new Color[chunkSize * chunkSize];
         for (int y = 0; y < chunkSize; y++) {
             for (int x = 0; x < chunkSize; x++) {
+                if(island) {
+                    noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - islandFalloffMap[x, y]);
+                }
                 float currentHeight = noiseMap[x, y];
                 for (int i = 0; i < regions.Length; i++) {
                     if (currentHeight <= regions[i].height) {
@@ -49,26 +60,23 @@ public class MapGEN : MonoBehaviour {
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawmode == DrawMode.NoiseMap) {
             display.DrawTexture(TextureGEN.TextureFromHeightMap(noiseMap));
+        } else if (drawmode == DrawMode.IslandFalloffMap) {
+            display.DrawTexture(TextureGEN.TextureFromHeightMap(islandFalloffMap));
         } else if (drawmode == DrawMode.ColourMap) {
             display.DrawTexture(TextureGEN.TextureFromColourMap(colourMap, chunkSize, chunkSize));
         } else if (drawmode == DrawMode.Mesh) {
             display.DrawMesh(MeshGEN.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail), TextureGEN.TextureFromColourMap(colourMap, chunkSize, chunkSize));
         } else if (drawmode == DrawMode.TileMap) {
-
             string holderName = "TiledMap";
-            if (transform.FindChild(holderName))
-            {
-                DestroyImmediate(transform.FindChild(holderName).gameObject);
+            if (transform.Find(holderName)) {
+                DestroyImmediate(transform.Find(holderName).gameObject);
             }
             Transform mapHolder = new GameObject(holderName).transform;
             mapHolder.parent = transform;
             TilesGEN tilesGEN = new TilesGEN();
             tilesGEN.GenerateTileMap(noiseMap, meshHeightMultiplier, meshHeightCurve, tilePrefab, mapHolder, regions);
         }
-
-
-
-    }
+}
 
     private void OnValidate() {
         if (noiseScale <= 0) {
@@ -80,6 +88,7 @@ public class MapGEN : MonoBehaviour {
         if (lacunarity < 1) {
             lacunarity = 1;
         }
+        islandFalloffMap = IslandGEN.GetIslandMap(chunkSize);
     }
 }
 
@@ -88,6 +97,19 @@ public struct TerrainType {
     public string name;
     public float height;
     public Color colour;
-
     public Sprite sprite;
+
+    public SpawnedObjects[] spawnedObjects;
+
+}
+
+
+[System.Serializable]
+public struct SpawnedObjects
+{
+    public string name;
+    public Object obj;
+    public Sprite sprite;
+
+    public float cumulativeWeight;
 }
