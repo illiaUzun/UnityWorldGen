@@ -17,7 +17,7 @@ public class MapGEN : MonoBehaviour {
     public float persistance;
     public float lacunarity;
 
-    public static int seed;
+    public int seed;
     public float objectsSpawnRate;
     public Vector2 offset;
 
@@ -66,6 +66,7 @@ public class MapGEN : MonoBehaviour {
             display.DrawTexture(TextureGEN.TextureFromColourMap(colourMap, chunkSize, chunkSize));
         } else if (drawmode == DrawMode.Mesh) {
             display.DrawMesh(MeshGEN.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail), TextureGEN.TextureFromColourMap(colourMap, chunkSize, chunkSize));
+      //      StupidSpawn.SpawnObjects(noiseMap, meshHeightMultiplier, meshHeightCurve, tilePrefab, regions);
         } else if (drawmode == DrawMode.TileMap) {
             string holderName = "TiledMap";
             if (transform.Find(holderName)) {
@@ -76,6 +77,8 @@ public class MapGEN : MonoBehaviour {
             TilesGEN tilesGEN = new TilesGEN();
             tilesGEN.GenerateTileMap(noiseMap, meshHeightMultiplier, meshHeightCurve, tilePrefab, mapHolder, regions);
         }
+
+
 }
 
     private void OnValidate() {

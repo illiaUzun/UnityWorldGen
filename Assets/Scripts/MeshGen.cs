@@ -24,6 +24,8 @@ public static class MeshGEN {
                     meshData.AddTriangle(vertexIndex + verticiesPerLine + 1, vertexIndex, vertexIndex + 1);
             }
                 vertexIndex++;
+
+               
             }
         }
         return meshData;

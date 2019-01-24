@@ -8,7 +8,7 @@ public class TilesGEN : MonoBehaviour
     public void GenerateTileMap(float[,] heightMap, float heightMultiplier, AnimationCurve animationCurve, Transform tilePrefab, Transform mapHolder, TerrainType[] regions) {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
-        System.Random prng = new System.Random(MapGEN.seed);
+        System.Random prng = new System.Random(1488);
 
         int sortOrder;
         for (int x = 0; x < width; x++) {
@@ -24,7 +24,7 @@ public class TilesGEN : MonoBehaviour
                         int blockCount = 0;
 
                         ///Если что - поменять порядок обхода по Z
-                            for (z = evaluatedHeight; z > 0; z -= .05f) {
+                            for (z = evaluatedHeight - (evaluatedHeight % .05f); z >= 0; z -= .05f) {
                                 Transform newTile = Instantiate(tilePrefab, tilePosition + ( new Vector2(0f, heightMultiplier) * z ), Quaternion.identity) as Transform;
                                 newTile.parent = mapHolder;
                                 SpriteRenderer spriteRenderer = newTile.GetComponent<SpriteRenderer>();
