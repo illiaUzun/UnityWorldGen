@@ -7,7 +7,7 @@ public class MapGEN : MonoBehaviour {
     public enum DrawMode { NoiseMap, IslandFalloffMap, ColourMap, Mesh, TileMap};
     public DrawMode drawmode;
 
-    const int chunkSize = 241;
+    const int chunkSize = 50;
     [Range(0,6)]
     public int levelOfDetail;
     public float noiseScale;
