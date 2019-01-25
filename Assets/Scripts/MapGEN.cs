@@ -78,6 +78,11 @@ public class MapGEN : MonoBehaviour {
             tilesGEN.GenerateTileMap(noiseMap, meshHeightMultiplier, meshHeightCurve, tilePrefab, mapHolder, regions);
         }
 
+        ////
+        Player player = new Player();
+        player.Spawn(noiseMap, meshHeightMultiplier, meshHeightCurve, tilePrefab, regions[0].spawnedObjects[0].sprite);
+        ////
+        
 
 }
 

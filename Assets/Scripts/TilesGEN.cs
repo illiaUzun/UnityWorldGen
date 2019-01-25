@@ -21,7 +21,6 @@ public class TilesGEN : MonoBehaviour
                         Vector2 tilePosition = CoordToPosition(x, y, height, width);
                         float evaluatedHeight = animationCurve.Evaluate(tileHeight);
                         float z = 0;
-                        int blockCount = 0;
 
                         ///Если что - поменять порядок обхода по Z
                             for (z = evaluatedHeight - (evaluatedHeight % .05f); z >= 0; z -= .05f) {

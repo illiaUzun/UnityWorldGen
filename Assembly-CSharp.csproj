@@ -67,7 +67,7 @@
     <Compile Include="Assets\Scripts\MapGEN.cs" />
     <Compile Include="Assets\Scripts\MeshGEN.cs" />
     <Compile Include="Assets\Scripts\PerlinNoise.cs" />
-    <Compile Include="Assets\Scripts\PlayerBehavior.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Sampling.cs" />
     <Compile Include="Assets\Scripts\StupidSpawn.cs" />
     <Compile Include="Assets\Scripts\TextureGEN.cs" />
